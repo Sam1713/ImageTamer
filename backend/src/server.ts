@@ -1,18 +1,15 @@
 import express from 'express';
-import dotenv from 'dotenv'
-import mongoose from 'mongoose';
+
 import connectDB from './config/config';
-
-
+import userRoute from "../src/routes/userRoute"
+import authRoute from "../src/routes/authRoute"
 connectDB();
 
 const app = express();
 const PORT = 3000;
 
-
-app.get('/', (req, res) => {
-  res.send('Hello, TypeScript with Express!');
-});
+app.use('/api/user',userRoute)
+app.use('/api/auth',authRoute)
 
 app.listen(PORT, () => {
   console.log(`Server is running at http://localhost:${PORT}`);
