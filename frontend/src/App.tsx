@@ -10,8 +10,8 @@ function App() {
     <BrowserRouter>
     <Header/>
     <Routes>
-      <Route path='/signin'element={<Signup/>}/>
-      <Route path='/signup'element={<Signin/>}/>
+      <Route path='/signup'element={<Signup/>}/>
+      <Route path='/signin'element={<Signin/>}/>
 
     </Routes>
     </BrowserRouter>
