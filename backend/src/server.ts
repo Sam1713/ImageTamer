@@ -1,14 +1,22 @@
 import express, { Request, Response, NextFunction,Router} from 'express';
+const cors = require('cors');
+
 import connectDB from './config/config';
 import userRoute from './routes/userRoute'; // Adjust path if necessary
 import authRoute from './routes/authRoute'; // Adjust path if necessary
 
+
+const corsOptions = {
+  origin: 'http://localhost:5173', // Replace with your frontend URL
+  credentials: true, // Allow credentials (cookies, tokens, etc.)
+};
 // Connect to the database
 connectDB();
 
 const app = express();
 const PORT = 3000;
 
+app.use(cors(corsOptions))
 // Middleware to parse JSON bodies
 app.use(express.json());
 
