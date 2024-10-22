@@ -46,14 +46,12 @@ const Signup: React.FC = () => {
     setErrors(newErrors);
 
     if (!valid) {
-      // toast.error('Please fix the errors in the form.');
       return; 
     }
     try {
       dispatch(signInStart())
       const response = await api.post('/api/auth/signin', formData);
       console.log('Signin:', response);
-      // dispatch(setToken(response.data.refreshToken))
       dispatch(signInSuccess(response.data.user))
       localStorage.setItem('access_token',response.data.accessToken)
       navigate('/home')

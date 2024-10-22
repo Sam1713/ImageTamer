@@ -3,10 +3,8 @@ import path from 'path';
 import fs from 'fs';
 import { Request } from 'express';
 
-// Define the directory path for uploads
 const uploadDir = path.join(__dirname, 'uploads/images');
 
-// Check if the directory exists, and create it if it doesn't
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true }); // Create the directory and any necessary parent directories
 }
