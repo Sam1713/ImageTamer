@@ -1,9 +1,10 @@
 import axios from 'axios';
 
 // Create an Axios instance
+// Create an Axios instance
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:3000', // Your API base URL
-    withCredentials: true, // This allows sending cookies with requests
+  baseURL: 'https://imagetamer-1.onrender.com', // Your API base URL
+  withCredentials: true, // This allows sending cookies with requests
 });
 
 // Function to retrieve the access token from cookies

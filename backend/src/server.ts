@@ -11,9 +11,10 @@ import authRoute from './routes/authRoute'; // Adjust path if necessary
 dotenv.config();
 
 const corsOptions = {
-  origin: 'http://localhost:5173', // Replace with your frontend URL
+  origin: ['http://localhost:5173', 'https://image-tamer-6jqy.vercel.app'], // Allow both local and production frontend
   credentials: true, // Allow credentials (cookies, tokens, etc.)
 };
+
 
 // Connect to the database
 connectDB();
