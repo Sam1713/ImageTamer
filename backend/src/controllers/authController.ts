@@ -5,11 +5,12 @@ import { errorHandler } from "../utils/error";
 import jwt from 'jsonwebtoken'
 export const signup=async(req:Request,res:Response,next:NextFunction):Promise<void>=>{
     console.log("halo");
-    const {username,email,password}=req.body
+    const {username,email,password,phone}=req.body
     const hashedPassword= bcryptjs.hashSync(password,10)
     const newUser=new User({
         username,
         email,
+        phone,
         password:hashedPassword
     })
     try{

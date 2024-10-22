@@ -127,8 +127,8 @@ const AddImageModal: React.FC<ImageTypes> = ({ isOpen, onClose,fetchImages }) =>
     
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-black p-6 rounded-lg shadow-lg w-96">
-            <h2 className="text-lg font-bold mb-4">Add Images</h2>
+          <div className="bg-custom-gradient p-6 rounded-lg shadow-lg w-96">
+            <h2 className="text-lg font-bold mb-4 text-white">Add Images</h2>
             {error && <div className="mb-4 text-red-500">{error}</div>} {/* Error message */}
 
             <form onSubmit={handleSubmit}>
@@ -184,19 +184,36 @@ const AddImageModal: React.FC<ImageTypes> = ({ isOpen, onClose,fetchImages }) =>
                 ))}
               </div>
     
-              <Box display="flex" justifyContent="flex-end" mt={3}>
-                <Button
-                  onClick={onClose}
-                  variant="outlined"
-                  color="secondary"
-                  sx={{ marginRight: 2 }}
-                >
-                  Cancel
-                </Button>
-                <Button disabled={files.length==0} type="submit" variant="contained" color="primary">
-                  Add
-                </Button>
-              </Box>
+              <Box 
+    display="flex" 
+    justifyContent="flex-end" 
+    sx={{ marginTop: 2 }} // Add some top margin for spacing
+><Button
+    onClick={onClose}
+    variant="outlined"
+    sx={{ 
+        borderColor: '#FF5733', // Custom border color
+        color: '#FF5733', // Custom text color
+        marginRight: 2, // Add some margin for spacing
+        '&:hover': {
+            backgroundColor: '#FF5733', // Background color on hover
+            color: 'white', // Text color on hover
+        }
+    }}
+>
+    Cancel
+</Button>
+
+    <Button 
+        disabled={files.length === 0} 
+        type="submit" 
+        variant="contained" 
+        color="primary"
+    >
+        Add
+    </Button>
+</Box>
+
             </form>
           </div>
         </div>

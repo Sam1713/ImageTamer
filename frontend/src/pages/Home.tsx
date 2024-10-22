@@ -137,7 +137,7 @@ const Home = () => {
       }
     }
   };
- return (
+  return (
     <>
         <div className='bg-black min-h-screen flex flex-col justify-center items-center'>
             <h1 className='text-white font-extrabold text-4xl mb-8 pt-12'>Image Gallery</h1>
@@ -159,52 +159,56 @@ const Home = () => {
                             ref={provided.innerRef}
                             {...provided.droppableProps}
                         >
-                            {images.map((item, index) => (
-                                <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
-                                    {(provided) => (
-                                        <div
-                                            className={`bg-white p-4 w-[70%] mx-auto rounded-lg shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${selectedImages.includes(item.id) ? 'border-4 border-blue-400' : 'border border-gray-200'}`}
-                                            onClick={() => toggleSelectImage(item.id)}
-                                            ref={provided.innerRef}
-                                            {...provided.draggableProps}
-                                            {...provided.dragHandleProps}
-                                        ><div className="relative">
-                                        <img 
-                                          src={item.src} 
-                                          className="w-full h-64 object-contain rounded-lg mb-4" 
-                                        />
-                                        
-                                        <button
-                                          onClick={(e) => {
-                                            e.stopPropagation(); 
-                                            handleDelete(item.id);
-                                          }}
-                                          className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition"
-                                          aria-label="Delete"
-                                        >
-                                          <FaTrash className="h-5 w-5" />
-                                        </button>
-                                      
-                                        
-                                      </div>
-                                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent text-white p-2 rounded-b-lg">
-                                          <p className="text-center  text-red-900 text-2xl font-bold ">{item.title}</p>
-                                        </div>
-                                        </div>
-                                    )}
-                                </Draggable>
-                            ))}
+                            {images.length === 0 ? (
+                                <div className="text-white text-center w-full">
+                                    <p className="text-lg">No images found</p>
+                                </div>
+                            ) : (
+                                images.map((item, index) => (
+                                    <Draggable key={item.id} draggableId={item.id.toString()} index={index}>
+                                        {(provided) => (
+                                            <div
+                                                className={`bg-white p-4 w-[70%] mx-auto rounded-lg shadow-lg transition-transform duration-300 ease-in-out transform hover:scale-105 cursor-pointer ${selectedImages.includes(item.id) ? 'border-4 border-blue-400' : 'border border-gray-200'}`}
+                                                onClick={() => toggleSelectImage(item.id)}
+                                                ref={provided.innerRef}
+                                                {...provided.draggableProps}
+                                                {...provided.dragHandleProps}
+                                            >
+                                                <div className="relative">
+                                                    <img 
+                                                        src={item.src} 
+                                                        className="w-full h-64 object-contain rounded-lg mb-4" 
+                                                    />
+                                                    
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation(); 
+                                                            handleDelete(item.id);
+                                                        }}
+                                                        className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition"
+                                                        aria-label="Delete"
+                                                    >
+                                                        <FaTrash className="h-5 w-5" />
+                                                    </button>
+                                                </div>
+                                                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-transparent to-transparent text-white p-2 rounded-b-lg">
+                                                    <p className="text-center text-red-900 text-2xl font-bold">{item.title}</p>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                ))
+                            )}
                             {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
             </DragDropContext>
-
-          
         </div>
         <AddImageModal isOpen={modalOpen} onClose={handleClose} fetchImages={fetchImages}/>
     </>
 );
+
 }
 
 

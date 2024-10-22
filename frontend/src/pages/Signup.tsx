@@ -1,21 +1,24 @@
 import { Button, TextField, InputAdornment } from '@mui/material';
-import { AccountCircle, Email, Lock } from '@mui/icons-material';
+import { AccountCircle, Email, Lock, Phone } from '@mui/icons-material'; // Import Phone icon
 import React, { useState } from 'react'; 
 import { Link } from 'react-router-dom';
 import api from '../components/api/Api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { validateEmail, validateUsername, validatePassword } from '../utils/Validation'; // Import the validation functions
+import { validateEmail, validateUsername, validatePassword, validatePhone } from '../utils/Validation'; // Add validatePhone function
 import CircularProgress from '@mui/material/CircularProgress';
+import { AxiosError } from 'axios';
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
+    phone: '',  // Add phone field to the state
   });
-  const [loading,setLoading]=useState<boolean>(false)
-  const [errors, setErrors] = useState({ username: '', email: '', password: '' });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errors, setErrors] = useState({ username: '', email: '', password: '', phone: '' }); // Add phone error
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
     setErrors({ ...errors, [e.target.id]: '' });
@@ -25,7 +28,7 @@ const Signup: React.FC = () => {
     e.preventDefault();
 
     let valid = true;
-    const newErrors = { username: '', email: '', password: '' };
+    const newErrors = { username: '', email: '', password: '', phone: '' }; // Add phone error
 
     if (!validateEmail(formData.email)) {
       newErrors.email = 'Invalid email format';
@@ -42,30 +45,38 @@ const Signup: React.FC = () => {
       valid = false;
     }
 
+    if (!validatePhone(formData.phone)) { 
+      newErrors.phone = 'Invalid phone number';
+      valid = false;
+    }
+
     setErrors(newErrors);
 
     if (!valid) {
-      // toast.error('Please fix the errors in the form.');
-      return; 
+      return;
     }
+
     try {
-      setLoading(true)
+      setLoading(true);
       const response = await api.post('/api/auth/signup', formData);
       console.log('Signup response:', response);
       toast.success('Signup successful!');
-      setFormData({ username: '', email: '', password: '' }); // Reset form
-      setLoading(false)
-    } catch (error: any) {
-      setLoading(false)
-      if (error.response) {
-        toast.error(error.response.data.message || 'An error occurred during signup.');
+      setFormData({ username: '', email: '', password: '', phone: '' }); // Reset form including phone
+      setLoading(false);
+    } catch (error: unknown) {
+      setLoading(false);
+      
+      if (error instanceof AxiosError && error.response) {
+          toast.error(error.response.data.message || 'An error occurred during signup.');
       } else {
-        toast.error('Network error. Please try again.');
+          toast.error('Network error. Please try again.');
       }
+      
       console.error('Signup error:', error);
-    }
-  };
+  }
   
+  };
+
   return (
     <div className='bg-custom-gradient flex justify-center items-center min-h-screen'>
       <div className='bg-black p-6 rounded-lg shadow-lg w-full max-w-sm'>
@@ -73,10 +84,10 @@ const Signup: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <div className='mb-4'>
             <TextField 
-              id="username" 
-              label="Username" 
-              variant="outlined" 
-              fullWidth 
+              id="username"
+              label="Username"
+              variant="outlined"
+              fullWidth
               value={formData.username}
               onChange={handleChange}
               required
@@ -93,31 +104,25 @@ const Signup: React.FC = () => {
               InputLabelProps={{ style: { color: 'white' } }} 
               sx={{ 
                 '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: 'white', 
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'lightblue', 
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'lightblue', 
-                  },
+                  '& fieldset': { borderColor: 'white' },
+                  '&:hover fieldset': { borderColor: 'lightblue' },
+                  '&.Mui-focused fieldset': { borderColor: 'lightblue' },
                 },
               }}
             />
           </div>
           <div className='mb-4'>
             <TextField 
-              id="email" 
-              label="Email" 
-              variant="outlined" 
-              fullWidth 
-              type="email" 
+              id="email"
+              label="Email"
+              variant="outlined"
+              fullWidth
+              type="email"
               value={formData.email}
               onChange={handleChange}
               required
-              error={!!errors.email} 
-              helperText={errors.email} 
+              error={!!errors.email}
+              helperText={errors.email}
               InputProps={{ 
                 style: { color: 'white' }, 
                 startAdornment: (
@@ -129,30 +134,54 @@ const Signup: React.FC = () => {
               InputLabelProps={{ style: { color: 'white' } }} 
               sx={{ 
                 '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: 'white', 
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'lightblue', 
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'lightblue', 
-                  },
+                  '& fieldset': { borderColor: 'white' },
+                  '&:hover fieldset': { borderColor: 'lightblue' },
+                  '&.Mui-focused fieldset': { borderColor: 'lightblue' },
                 },
               }}
             />
           </div>
           <div className='mb-4'>
             <TextField 
-              id="password" 
-              label="Password" 
-              variant="outlined" 
-              fullWidth 
-              type="password" 
+              id="phone"
+              label="Phone Number"
+              variant="outlined"
+              fullWidth
+              type="tel"
+              value={formData.phone}
+              onChange={handleChange}
+              required
+              error={!!errors.phone}
+              helperText={errors.phone}
+              InputProps={{ 
+                style: { color: 'white' }, 
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Phone style={{ color: 'white' }} /> {/* Phone icon */}
+                  </InputAdornment>
+                ),
+              }} 
+              InputLabelProps={{ style: { color: 'white' } }} 
+              sx={{ 
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': { borderColor: 'white' },
+                  '&:hover fieldset': { borderColor: 'lightblue' },
+                  '&.Mui-focused fieldset': { borderColor: 'lightblue' },
+                },
+              }}
+            />
+          </div>
+          <div className='mb-4'>
+            <TextField 
+              id="password"
+              label="Password"
+              variant="outlined"
+              fullWidth
+              type="password"
               value={formData.password}
               onChange={handleChange}
               required
-              error={!!errors.password} 
+              error={!!errors.password}
               helperText={errors.password}
               InputProps={{ 
                 style: { color: 'white' }, 
@@ -165,19 +194,15 @@ const Signup: React.FC = () => {
               InputLabelProps={{ style: { color: 'white' } }} 
               sx={{ 
                 '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: 'white', 
-                  },
-                  '&:hover fieldset': {
-                    borderColor: 'lightblue', 
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'lightblue', 
-                  },
+                  '& fieldset': { borderColor: 'white' },
+                  '&:hover fieldset': { borderColor: 'lightblue' },
+                  '&.Mui-focused fieldset': { borderColor: 'lightblue' },
                 },
               }}
             />
           </div>
+          {/* Phone Number Field */}
+         
           <Button
             className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:scale-105 transition-transform duration-200"
             variant="contained"

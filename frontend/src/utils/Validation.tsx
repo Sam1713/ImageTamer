@@ -13,3 +13,8 @@ export const validateEmail = (email: string): boolean => {
     return regex.test(password);
   };
   
+  export const validatePhone = (phone: string): boolean => {
+    const regex = /^[0-9]{10,15}$/;
+    return regex.test(phone);
+  };
+  
