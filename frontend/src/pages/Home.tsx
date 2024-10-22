@@ -20,7 +20,7 @@ interface ResponseType{
     isDelete?:boolean
 }
 
-const Home = () => {
+const Home:React.FC = () => {
     const [images, setImages] = useState<ImageItem[]>([]);
     const [selectedImages, setSelectedImages] = useState<number[]>([]);
     const [modalOpen,setModalOpen]=useState<boolean>(false)

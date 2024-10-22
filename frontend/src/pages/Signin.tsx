@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { validateEmail, validatePassword } from '../utils/Validation'; // Import the validation functions
 import CircularProgress from '@mui/material/CircularProgress';
 import { useDispatch, useSelector } from 'react-redux';
-import { setToken, signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice';
+import {  signInFailure, signInStart, signInSuccess } from '../redux/user/userSlice';
 import { AppDispatch, RootState } from '../redux/store';
 
 const Signup: React.FC = () => {
@@ -58,6 +58,7 @@ const Signup: React.FC = () => {
       navigate('/home')
       setFormData({  email: '', password: '' });
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       dispatch(signInFailure())
       if (error.response) {
