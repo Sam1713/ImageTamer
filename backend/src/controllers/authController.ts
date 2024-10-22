@@ -36,7 +36,7 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
         if (!validPassword) return next(errorHandler(401, 'Invalid credentials'));
 
         const token = jwt.sign({ id: validUser._id, userType: 'user' }, process.env.JWT_SECRET as string, {
-            expiresIn: '1m'
+            expiresIn: '15m'
         });
 
         const refreshToken = jwt.sign({ id: validUser._id, userType: 'user' }, process.env.REFRESH_TOKEN_SECRET as string, {
@@ -46,14 +46,14 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
         res.cookie('access_token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict', 
+            sameSite: 'none', 
             maxAge: 60000 
         });
 
         res.cookie('refresh_token', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: 'none',
             maxAge: 10000000// 7 days for refresh token
         });
     const{password:hashedPassword,...rest}=validUser

@@ -65,7 +65,7 @@ const renewToken = (userType: 'user' | 'admin') => async (req: Request, res: Res
         }
 
         const newAccessToken = jwt.sign({ id: decoded.id, userType: decoded.userType }, process.env.JWT_SECRET as string, {
-            expiresIn: '15m' 
+            expiresIn: '3200m' 
         });
 
         res.cookie('access_token', newAccessToken, {
