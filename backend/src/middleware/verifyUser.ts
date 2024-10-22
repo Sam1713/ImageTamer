@@ -52,7 +52,7 @@ export const verifyUser = (userType: 'user' | 'admin') => async (req: Request, r
 // Renew token function
 const renewToken = (userType: 'user' | 'admin') => async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     const refresh_token = req.cookies.refresh_token;
-
+    console.log('r',refresh_token)
     if (!refresh_token) {
         return res.status(401).json({ message: 'Refresh token is missing.' });
     }
