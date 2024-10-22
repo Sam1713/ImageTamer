@@ -28,41 +28,41 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
     const { email, password } = req.body;
 
     try {
+        // Find the user by email
         const validUser = await User.findOne({ email }).lean();
         if (!validUser) return next(errorHandler(404, 'User not found'));
 
         const validPassword = bcryptjs.compareSync(password, validUser.password);
         if (!validPassword) return next(errorHandler(401, 'Invalid credentials'));
 
-        // Longer expiration for access token
         const token = jwt.sign({ id: validUser._id, userType: 'user' }, process.env.JWT_SECRET as string, {
-            expiresIn: '15m' // Change to a reasonable expiration
+            expiresIn: '1m'
         });
 
         const refreshToken = jwt.sign({ id: validUser._id, userType: 'user' }, process.env.REFRESH_TOKEN_SECRET as string, {
-            expiresIn: '7d' // Change to a reasonable expiration
+            expiresIn: '3600m'
         });
 
         res.cookie('access_token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 15 * 60 * 1000 // Adjust based on new token expiration
+            sameSite: 'strict', 
+            maxAge: 60000 
         });
 
         res.cookie('refresh_token', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+            maxAge: 10000000// 7 days for refresh token
         });
-
-        const { password: hashedPassword, ...rest } = validUser;
-        res.status(200).json({ message: 'Login successful', rest });
+    const{password:hashedPassword,...rest}=validUser
+        res.status(200).json({ message: 'Login successful',rest });
     } catch (error) {
         next(error);
     }
 };
+
 export const logout = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
     try {
       console.log('Cookies before clearing:', req.cookies);

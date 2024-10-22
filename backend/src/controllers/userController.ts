@@ -136,12 +136,14 @@ export const deleteImage = async (req: Request, res: Response, next: NextFunctio
   const imageId = req.params.id as string; 
 
   try {
+    // Find the image in the database
     const image = await ImageModel.findOne({ userId, 'files._id': imageId });
 
     if (!image) {
     res.status(404).json({ message: 'Image not found' });
     }
 
+    // Find the specific file to mark as deleted
     const fileToDelete:any = image?.files.find(file => file._id.toString() === imageId);
     
     if (!fileToDelete) {
@@ -150,9 +152,10 @@ export const deleteImage = async (req: Request, res: Response, next: NextFunctio
 
     console.log('f',fileToDelete)
 
-    fileToDelete.isDelete = true; 
+    // Mark the file as deleted
+    fileToDelete.isDelete = true; // Assuming you have an isDelete field in your file object
     
-    
+    // Save the updated image document
     await image?.save();
 
     res.status(200).json({ message: 'Image marked as deleted successfully' });
