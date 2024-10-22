@@ -33,7 +33,7 @@ This application allows users to register, log in, add images with titles, rearr
 ### Installation
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/image-gallery-app.git
+   git clone https://github.com/Sam1713/ImageTamer.git
 
 
 ### Navigate to project Directory
