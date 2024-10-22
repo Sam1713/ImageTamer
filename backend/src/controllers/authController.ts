@@ -32,32 +32,26 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
         const validUser = await User.findOne({ email }).lean();
         if (!validUser) return next(errorHandler(404, 'User not found'));
 
+        // Check if the provided password matches the stored hashed password
         const validPassword = bcryptjs.compareSync(password, validUser.password);
         if (!validPassword) return next(errorHandler(401, 'Invalid credentials'));
 
+        // Create an access token
         const token = jwt.sign({ id: validUser._id, userType: 'user' }, process.env.JWT_SECRET as string, {
-            expiresIn: '15m'
+            expiresIn: '15m' // Set the expiration time for the access token
         });
 
-        const refreshToken = jwt.sign({ id: validUser._id, userType: 'user' }, process.env.REFRESH_TOKEN_SECRET as string, {
-            expiresIn: '3600m'
-        });
-
+        // Set the access token in the cookie
         res.cookie('access_token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
             sameSite: 'none', 
-            maxAge: 60000 
+            maxAge: 15 * 60 * 1000 // 15 minutes for the access token
         });
 
-        res.cookie('refresh_token', refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'none',
-            maxAge: 10000000// 7 days for refresh token
-        });
-    const{password:hashedPassword,...rest}=validUser
-        res.status(200).json({ message: 'Login successful',rest });
+        // Return the user details without the password
+        const { password: hashedPassword, ...rest } = validUser;
+        res.status(200).json({ message: 'Login successful', user: rest });
     } catch (error) {
         next(error);
     }
@@ -75,12 +69,7 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
       });
   
       // Clear the refresh token cookie
-      res.clearCookie('refresh_token', {
-        httpOnly: true,
-        secure: true,
-        sameSite: 'strict',
-      });
-  
+   
       console.log('Cookies after clearing:', req.cookies); // These should now be undefined or missing
   
       res.status(200).json({ message: 'Logged out successfully' });

@@ -38,6 +38,7 @@ const Home:React.FC = () => {
                 src: image.url,
                 order:image.order
             }));
+            console.log('haii')
             console.log('Fetched Images:', fetchedImages);
             setImages(fetchedImages);
         } catch (error) {
