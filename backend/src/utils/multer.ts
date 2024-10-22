@@ -1,16 +1,25 @@
 import multer from 'multer';
 import path from 'path';
+import fs from 'fs';
 import { Request } from 'express';
+
+// Define the directory path for uploads
+const uploadDir = path.join(__dirname, 'uploads/images');
+
+// Check if the directory exists, and create it if it doesn't
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true }); // Create the directory and any necessary parent directories
+}
 
 // Define storage options
 const storage = multer.diskStorage({
-  destination: (req: Request, file: Express.Multer.File, cb) => {
-    cb(null, 'uploads/images'); // Specify the directory for uploads
-  },
-  filename: (req: Request, file: Express.Multer.File, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9); // Generate a unique filename
-    cb(null, `${uniqueSuffix}${path.extname(file.originalname)}`); // Append the file extension
-  },
+    destination: (req: Request, file: Express.Multer.File, cb) => {
+        cb(null, uploadDir); // Specify the directory for uploads
+    },
+    filename: (req: Request, file: Express.Multer.File, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9); // Generate a unique filename
+        cb(null, `${uniqueSuffix}${path.extname(file.originalname)}`); // Append the file extension
+    },
 });
 
 // Initialize Multer with storage options
