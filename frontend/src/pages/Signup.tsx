@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import api from '../components/api/Api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { validateEmail, validateUsername, validatePassword } from '../../utils/Validation'; // Import the validation functions
+import { validateEmail, validateUsername, validatePassword } from '../utils/Validation'; // Import the validation functions
 import CircularProgress from '@mui/material/CircularProgress';
 
 const Signup: React.FC = () => {

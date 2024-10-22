@@ -1,5 +1,6 @@
 import express, { Request, Response, NextFunction,Router} from 'express';
-const cors = require('cors');
+import cors from 'cors';
+import cookieParser from 'cookie-parser'; // Import cookie-parser
 
 import connectDB from './config/config';
 import userRoute from './routes/userRoute'; // Adjust path if necessary
@@ -13,8 +14,12 @@ const corsOptions = {
 // Connect to the database
 connectDB();
 
+
 const app = express();
 const PORT = 3000;
+
+
+app.use(cookieParser());
 
 app.use(cors(corsOptions))
 // Middleware to parse JSON bodies
