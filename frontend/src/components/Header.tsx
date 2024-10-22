@@ -11,6 +11,7 @@ const Header: React.FC = () => {
     console.log('sdf')
     try{
     const response=await api.get('/api/auth/logout')
+    localStorage.removeItem('access_token')
     dispatch(setLogout())
     console.log('res',response)
     }catch(error){

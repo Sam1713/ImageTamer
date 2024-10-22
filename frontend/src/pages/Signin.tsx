@@ -54,7 +54,8 @@ const Signup: React.FC = () => {
       const response = await api.post('/api/auth/signin', formData);
       console.log('Signin:', response);
       // dispatch(setToken(response.data.refreshToken))
-      dispatch(signInSuccess(response.data.rest))
+      dispatch(signInSuccess(response.data.user))
+      localStorage.setItem('access_token',response.data.accessToken)
       navigate('/home')
       setFormData({  email: '', password: '' });
 

@@ -29,6 +29,7 @@ const Home:React.FC = () => {
         fetchImages();
     }, []);
     const fetchImages = async () => {
+        console.log('sdfsdf')
         try {
             const response = await api.get('/api/user/home');
             console.log('API Response:', response.data.images);

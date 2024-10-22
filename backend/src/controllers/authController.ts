@@ -38,20 +38,19 @@ export const signin = async (req: Request, res: Response, next: NextFunction): P
 
         // Create an access token
         const token = jwt.sign({ id: validUser._id, userType: 'user' }, process.env.JWT_SECRET as string, {
-            expiresIn: '15m' // Set the expiration time for the access token
         });
 
-        // Set the access token in the cookie
-        res.cookie('access_token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-            sameSite: 'none', 
-            maxAge: 15 * 60 * 1000 // 15 minutes for the access token
-        });
+        // // Set the access token in the cookie
+        // res.cookie('access_token', token, {
+        //     httpOnly: true,
+        //     secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+        //     sameSite: 'none', 
+        //     maxAge: 15 * 60 * 1000 // 15 minutes for the access token
+        // });
 
         // Return the user details without the password
         const { password: hashedPassword, ...rest } = validUser;
-        res.status(200).json({ message: 'Login successful', user: rest });
+        res.status(200).json({ message: 'Login successful', user: rest,accessToken:token });
     } catch (error) {
         next(error);
     }

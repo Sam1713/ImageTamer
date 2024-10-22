@@ -107,8 +107,8 @@ interface TokenPayload {
 export const verifyUser = (userType: 'user' | 'admin') => async (req: Request, res: Response, next: NextFunction): Promise<any> => {
     console.log('Cookies:', req.cookies);
 
-    const access_token = req.cookies.access_token; 
-    console.log('Access Token:', access_token);
+    const access_token = req.header('Authorization')?.replace('Bearer ', '');
+    console.log('token', access_token);
 
     if (!access_token) {
         return res.status(401).json({ message: 'Access token is missing.' });
