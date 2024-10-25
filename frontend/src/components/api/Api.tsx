@@ -1,7 +1,5 @@
 import axios from 'axios';
 
-// Create an Axios instance
-// Create an Axios instance
 const axiosInstance = axios.create({
   baseURL: 'https://imagetamer-1.onrender.com', // Your API base URL
   //  baseURL: 'http://localhost:3001',

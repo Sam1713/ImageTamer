@@ -85,7 +85,7 @@ const AddImageModal: React.FC<ImageTypes> = ({ isOpen, onClose,fetchImages }) =>
         if (isConfirmed) {
           try {
             const response = await api.post('/api/user/postImages', formData, {
-              headers: { 'Content-Type': 'multipart/form-data' }, // Ensure the proper header is set
+              headers: { 'Content-Type': 'multipart/form-data' }, 
             });
             console.log('Response:', response);
       
