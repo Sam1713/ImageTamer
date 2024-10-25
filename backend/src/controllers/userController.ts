@@ -25,7 +25,6 @@ export const postImages = async (req: Request, res: Response, next: NextFunction
 
     const existingImages = await ImageModel.find({ userId }).select('files.order');
 
-    // Safely calculate the current maximum order
     const currentMaxOrder = existingImages.reduce((max, img) => {
       const maxOrderInImage = img.files.reduce((innerMax, file) => {
         return file.order ? Math.max(innerMax, file.order) : innerMax;
@@ -39,26 +38,22 @@ export const postImages = async (req: Request, res: Response, next: NextFunction
         return { 
           url: result.secure_url, 
           title: titles[index], 
-          order: currentMaxOrder + index + 1, // Assign the new order based on the current max
+          order: currentMaxOrder + index + 1, 
           isDelete:false
         }; 
       })
     );
 
-    // Populate the fileUrls array
     fileUrls = await Promise.all(fileUploads);
     console.log('fi',fileUrls)
 
-    // Create a new image document
     const newImage = new ImageModel({
       userId: userId,
       files: fileUrls,
     });
 
-    // Save to MongoDB
     await newImage.save();
     console.log('fi',fileUrls)
-    // Send a success response
     res.status(200).json({
       message: 'Images uploaded and saved successfully',
       images: fileUrls,
