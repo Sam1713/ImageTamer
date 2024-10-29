@@ -12,7 +12,6 @@ function App() {
     <BrowserRouter>
       <Header />
       <Routes>
-        {/* Public routes */}
         <Route element={<PublicRoute />}>
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
