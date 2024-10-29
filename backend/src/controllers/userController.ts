@@ -77,7 +77,7 @@ export const homePage = async (req: Request, res: Response, next: NextFunction):
 
     const sortedImages = userImages
       .flatMap(img => img.files.filter(file => !file.isDelete)) // Exclude deleted images
-      .sort((a, b) => a.order - b.order); 
+      .sort((a, b) => b.order - a.order); 
 
     console.log('fi', sortedImages);
     res.status(200).json({
@@ -98,11 +98,12 @@ export const rearrangeImages = async (req: Request, res: Response, next: NextFun
     if (!Array.isArray(images) || images.length === 0) {
       res.status(400).json({ message: 'Invalid data: images should be a non-empty array.' });
     }
-
+    let imgLength=images.length
     const updatedImages = images.map((image:any, index:number) => ({
       ...image,
-      order: index + 1
+      order: imgLength--
     }));
+    console.log('upa',updatedImages)
 
     const updatePromises = updatedImages.map(async (image: { id: string; order: number }) => {
       if (typeof image.id !== 'string' || !image.id.trim() || typeof image.order !== 'number') {
@@ -114,7 +115,7 @@ export const rearrangeImages = async (req: Request, res: Response, next: NextFun
         { $set: { "files.$.order": image.order } } 
       );
     });
-
+    console.log('upa',updatePromises)
     await Promise.all(updatePromises);
 
     res.status(200).json({ message: 'Image orders updated successfully' });
