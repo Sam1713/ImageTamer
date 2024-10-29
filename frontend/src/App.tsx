@@ -11,7 +11,7 @@ function App() {
   return (
     <BrowserRouter>
       <Header />
-      <Routes>  
+      <Routes>
         <Route element={<PublicRoute />}>
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
