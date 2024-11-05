@@ -326,14 +326,14 @@ const Home: React.FC = () => {
         try {
           await api.put('/api/user/reorder', { images: updatedImages });
           Swal.fire('Saved!', 'Your image order has been saved.', 'success');
-          fetchImages(); // Reload images to reflect new order
+          fetchImages(); 
         } catch (error) {
           console.error('Error saving order:', error);
           Swal.fire('Error!', 'There was an error saving the order.', 'error');
-          setImages(images); // Revert order if saving failed
+          setImages(images);
         }
       } else {
-        setImages(images); // Revert order if canceled
+        setImages(images); 
       }
     }
   };
@@ -378,32 +378,42 @@ const Home: React.FC = () => {
             <p className="text-lg font-semibold">Loading items...</p>
           </div>
         ) : (
-<div
-          className={`grid grid-cols-4 gap-4 w-4/5 bg-gradient-to-r from-green-400 to-teal-500 p-8 rounded-xl 
+<div   
+          className={`grid md:grid-cols-4 lg:grid-cols-4 gap-4 w-4/5 bg-gradient-to-r from-green-400 to-teal-500 p-8 rounded-xl 
             ${images.length > 8 ? 'overflow-y-scroll max-h-[500px]' : 'overflow-y-hidden'}`}
-        >            {images.map((item, index) => (
-              <div
-                key={item.id}
-                draggable
-                onDragStart={(e) => handleDragStart(e, index)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={(e) => handleDrop(e, index)}
-                className="bg-black rounded-lg shadow-md flex flex-col items-center p-4 hover:shadow-xl relative transition-transform transform hover:scale-105"
-                style={{ height: "220px" }}
+        >         {images.map((item, index) => (
+            <div
+              key={item.id}
+              draggable
+              onDragStart={(e) => handleDragStart(e, index)}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => handleDrop(e, index)}
+              className="bg-black  rounded-lg shadow-md flex flex-col items-center p-4 relative transition-transform transform hover:scale-105"
+              style={{ height: "220px" }}
+            >
+              <div className="relative group">
+  <img
+    src={item.src}
+    alt={item.title}
+    className="h-[20vh] w-auto rounded-md object-cover transition duration-300 ease-in-out transform group-hover:blur-sm"
+  />
+  <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 opacity-0 group-hover:opacity-100 transition-opacity">
+    <span className="text-2xl font-bold bg-cyan-500 bg-clip-text text-transparent">
+      {item.title}
+    </span>
+  </div>
+</div>
+
+              <button
+                onClick={() => handleDelete(item.id)}
+                className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                aria-label="Delete"
               >
-                <img src={item.src} alt={item.title} className="h-[20vh] w-auto rounded-md object-cover" />
-                <div className="mt-3 text-center text-base font-semibold text-gray-200 bg-gray-800 bg-opacity-80 rounded-md px-2 py-1">
-                  {item.title}
-                </div>
-                <button
-                  onClick={() => handleDelete(item.id)}
-                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
-                  aria-label="Delete"
-                >
-                  <FaTrash className="h-3 w-3" />
-                </button>
-              </div>
-            ))}
+                <FaTrash className="h-3 w-3" />
+              </button>
+            </div>
+          ))}
+          
             <button
               onClick={handleOpen}
               className="z-10 bg-green-500 text-white rounded-full p-5 shadow-xl hover:shadow-2xl fixed right-6 top-[15%] flex items-center justify-center"
